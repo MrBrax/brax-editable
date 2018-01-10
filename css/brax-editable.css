@@ -1,0 +1,70 @@
+.brax-editable {
+	display: inline-block;
+}
+
+.brax-editable[data-editing="0"] {
+
+	color: #996767;
+
+	border-bottom: 1px dotted;
+
+	cursor: pointer;
+
+}
+
+.brax-editable[data-editing="0"]:hover {
+
+	color: #732828;
+
+}
+
+.brax-editable span[data-icon] {
+	display: inline-block;
+	width: 0px;
+	overflow: hidden;
+	transition: 0.2s all;
+}
+
+.brax-editable[data-editing="0"]:hover span[data-icon] {
+	padding-right: 10px;
+}
+
+
+
+.brax-editable span[data-input] {
+	display: flex;
+}
+
+.brax-editable input[type="date"], .brax-editable input[type="time"] {
+	padding: 3px 6px;
+}
+
+.brax-editable-button {
+	
+	border: none;
+	
+	background: #4D92C8;
+	
+	color: #fff;
+
+	cursor: pointer;
+
+	padding: 3px 6px;
+
+}
+
+.brax-editable-clear {
+	background: #B4BA57;
+}
+
+.brax-editable-cancel {
+	background: #C74C4C;
+}
+
+.brax-editable-save {
+	background: #7CBA57;
+}
+
+.brax-editable-button:hover {
+	background: #000;
+}
