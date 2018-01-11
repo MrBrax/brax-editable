@@ -30,9 +30,11 @@ if( $_POST ){
 
 	$response['status'] = 'ok';
 
-	$response['key'] = 'Key: ' . $_POST['key'];
+	$response['gotKey'] = $_POST['key'];
 
-	$response['newValue'] = 'Test! ' . $_POST['value'];
+	$response['gotName'] = $_POST['name'];
+
+	$response['newValue'] = 'Value! ' . $_POST['value'];
 
 	$response['newText'] = 'Text! ' . $_POST['value'];
 
@@ -59,6 +61,7 @@ if( $_POST ){
 
 	<a
 		data-editable="1"
+		data-name="input-text"
 		data-value="testValue"
 		data-type="text"
 		data-url="index.php"
@@ -69,6 +72,7 @@ if( $_POST ){
 
 	<a
 		data-editable="1"
+		data-name="input-date"
 		data-value="2018-01-05"
 		data-type="date"
 		data-url="index.php"
@@ -79,6 +83,7 @@ if( $_POST ){
 
 	<a
 		data-editable="1"
+		data-name="input-time"
 		data-value="21:00"
 		data-type="time"
 		data-url="index.php"
@@ -89,6 +94,7 @@ if( $_POST ){
 
 	<a
 		data-editable="1"
+		data-name="input-datetime"
 		data-value="2018-01-05 21:00"
 		data-type="datetime"
 		data-url="index.php"
@@ -99,6 +105,7 @@ if( $_POST ){
 
 	<a
 		data-editable="1"
+		data-name="input-select"
 		data-value="val5"
 		data-type="select"
 		data-source="?list"
@@ -110,6 +117,7 @@ if( $_POST ){
 
 	<a
 		data-editable="1"
+		data-name="input-selectivity"
 		data-value="id5"
 		data-type="selectivity"
 		data-source="?list"

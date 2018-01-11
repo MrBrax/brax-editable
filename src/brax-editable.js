@@ -21,6 +21,8 @@ class BraxEditable {
 
 		this.key = this.element.getAttribute('data-key');
 
+		this.name = this.element.getAttribute('data-name');
+
 		this.url = this.element.getAttribute('data-url');
 
 		this.method = this.element.getAttribute('data-get') ? 'GET' : 'POST';
@@ -360,6 +362,7 @@ class BraxEditable {
 
 		var data = new FormData();
 		data.append( 'key', this.key );
+		data.append( 'name', this.name );
 		data.append( 'value', this.currentValue );
 
 
