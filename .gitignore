@@ -2,3 +2,5 @@ js/
 src/.sass-cache/
 css/brax-editable.css.map
 node_modules/
+css/
+.sass-cache/

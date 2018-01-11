@@ -48,10 +48,10 @@ if( $_POST ){
 	<title>Brax-Editable</title>
 	<meta charset="utf-8" />
 
-	<script src="js/selectivity.js"></script>
-	<link href="js/selectivity.css" rel="stylesheet" />
+	<!--<script src="js/selectivity.js"></script>-->
+	<link href="css/selectivity.min.css" rel="stylesheet" />
 
-	<script src="src/brax-editable.js"></script>
+	<script src="js/brax-editable.js"></script>
 	<link href="css/brax-editable.css" rel="stylesheet" />
 
 </head>

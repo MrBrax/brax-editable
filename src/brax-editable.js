@@ -1,9 +1,7 @@
-
 var Selectivity = require('selectivity');
 require('selectivity/dropdown');
 require('selectivity/inputs/single');
 require('selectivity/templates');
-
 
 // import Selectivity from 'selectivity';
 
@@ -89,7 +87,9 @@ class BraxEditable {
 
 		});
 
-		this.element.setAttribute('data-editing', 0);	
+		this.element.setAttribute('data-editing', 0);
+
+		this.element.setAttribute('data-hooked', 1);
 
 	}
 
@@ -138,9 +138,12 @@ class BraxEditable {
 
 					// some systems do this
 					if( item.pk ) option.value = item.pk;
+					if( item.id ) option.value = item.id;
 
 					// metadata
 					if( item.extra ) option.extra = item.extra;
+
+					option.id = option.value; // selectivity
 
 					this.options.push( option );
 
@@ -222,9 +225,11 @@ class BraxEditable {
 			this.selectivity = new Selectivity.Inputs.Single({
 				element: this.inputBox,
 				items: [],
+				
 				templates: {
 					resultItem: this.renderTemplate.bind(this)
 				},
+			
 				// showSearchInputInDropdown: false,
 				showSearchInput: true,
 				allowClear: true,
@@ -532,4 +537,4 @@ class BraxEditable {
 
 }
 
-export default BraxEditable;
+export { BraxEditable }

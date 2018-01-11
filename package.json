@@ -4,7 +4,9 @@
   "description": "X-Editable alternative (inline editing) without jQuery",
   "main": "js/brax-editable.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "php -S localhost:2000",
+    "css": "sass --watch src/brax-editable.scss:css/brax-editable.css --style compressed"
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,12 @@
   },
   "homepage": "https://github.com/MrBrax/brax-editable#readme",
   "dependencies": {
-    "selectivity": "^3.0.6"
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.0",
+    "selectivity": "^3.0.6",
+    "webpack": "^3.10.0"
   }
 }
