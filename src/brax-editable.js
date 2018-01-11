@@ -1,3 +1,12 @@
+
+var Selectivity = require('selectivity');
+require('selectivity/dropdown');
+require('selectivity/inputs/single');
+require('selectivity/templates');
+
+
+// import Selectivity from 'selectivity';
+
 class BraxEditable {
 
 	constructor( element ){
@@ -86,6 +95,11 @@ class BraxEditable {
 
 	fetchList(){
 
+		if( !this.source ){
+			console.error('No source for list provided');
+			return false;
+		}
+
 		fetch( this.source )
 		.then( (response) => {
 
@@ -112,15 +126,35 @@ class BraxEditable {
 
 				if( !this.isEditing ) return;
 
-				this.options = response.items;
+				this.options = [];
+
+				for( var item of response.items ){
+
+					var option = {};
+
+					// default
+					option.value 	= item.value;
+					option.text 	= item.text;
+
+					// some systems do this
+					if( item.pk ) option.value = item.pk;
+
+					// metadata
+					if( item.extra ) option.extra = item.extra;
+
+					this.options.push( option );
+
+				}
+
+				// this.options = response.items;
 
 				if( this.inputField ){
 
 					for( var option of this.options ){
 
 						var el 			= document.createElement('option');
-						el.value 		= option.v ? option.v : option.value;
-						el.innerHTML 	= option.t ? option.t : option.text;
+						el.value 		= option.value;
+						el.innerHTML 	= option.text;
 
 						if( this.value == el.value ) el.setAttribute('selected', 'selected');
 
@@ -136,8 +170,8 @@ class BraxEditable {
 
 						this.selectivity.items.push( option );
 
-						if( option.id == this.value ){
-							this.selectivity.setValue( option.id );
+						if( option.value == this.value ){
+							this.selectivity.setValue( option.value );
 							// console.log('found value', option.id);
 						}
 
@@ -175,6 +209,11 @@ class BraxEditable {
 			this.fetchList();
 
 		}else if( this.type == 'selectivity' ){
+
+			if( !Selectivity ){
+				console.error('Selectivity not found');
+				return false;
+			}
 
 			this.inputBox 		= document.createElement('div');
 			
@@ -493,6 +532,4 @@ class BraxEditable {
 
 }
 
-
-
-// export default BraxEditable;
+export default BraxEditable;

@@ -1,0 +1,22 @@
+{
+  "name": "brax-editable",
+  "version": "1.0.0",
+  "description": "X-Editable alternative (inline editing) without jQuery",
+  "main": "js/brax-editable.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrBrax/brax-editable.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MrBrax/brax-editable/issues"
+  },
+  "homepage": "https://github.com/MrBrax/brax-editable#readme",
+  "dependencies": {
+    "selectivity": "^3.0.6"
+  }
+}

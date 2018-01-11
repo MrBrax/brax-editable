@@ -1,0 +1,74 @@
+.brax-editable {
+	
+	display: inline-block;
+
+	&[data-editing="0"] {
+
+		color: #996767;
+
+		border-bottom: 1px dotted;
+
+		cursor: pointer;
+
+		&:hover {
+
+			color: #732828;
+
+			/*
+			span[data-icon] {
+				padding-right: 10px;
+			}
+			*/
+
+		}
+
+	}
+
+	/*
+	span[data-icon] {
+		display: inline-block;
+		width: 0px;
+		overflow: hidden;
+		transition: 0.2s all;
+	}
+	*/
+
+	span[data-input] {
+		display: flex;
+	}
+
+	input[type="date"], input[type="time"] {
+		padding: 3px 6px;
+	}
+
+}
+
+.brax-editable-button {
+	
+	border: none;
+	
+	background: #4D92C8;
+	
+	color: #fff;
+
+	cursor: pointer;
+
+	padding: 3px 6px;
+
+	&:hover {
+		background: #000;
+	}
+
+}
+
+.brax-editable-clear {
+	background: #B4BA57;
+}
+
+.brax-editable-cancel {
+	background: #C74C4C;
+}
+
+.brax-editable-save {
+	background: #7CBA57;
+}
