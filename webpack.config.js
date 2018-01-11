@@ -6,7 +6,7 @@ module.exports = {
 
 	entry: './src/brax-editable.js',
 
-	// devtool: 'source-map',
+	devtool: 'none',
 
 	watch: true,
 
