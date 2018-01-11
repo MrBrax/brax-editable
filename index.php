@@ -56,6 +56,16 @@ if( $_POST ){
 	<script src="js/brax-editable.js"></script>
 	<link href="css/brax-editable.css" rel="stylesheet" />
 
+	<style>
+
+		body {
+			
+			font: 14px 'Open Sans', Arial;
+
+		}
+
+	</style>
+
 </head>
 <body>
 

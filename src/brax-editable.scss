@@ -1,3 +1,5 @@
+@import "../node_modules/choices.js/assets/styles/scss/choices";
+
 .brax-editable {
 	
 	display: inline-block;
@@ -37,12 +39,27 @@
 	}
 	*/
 
-	span[data-input] {
-		display: flex;
-	}
-
 	input[type="date"], input[type="time"] {
 		padding: 3px 6px;
+	}
+
+}
+
+.brax-editable-input {
+	
+	display: flex;
+
+	text-align: left;
+	
+	color: #000;
+
+	.choices {
+		min-width: 200px;
+		margin-bottom: 0;
+	}
+	
+	.choices__inner {
+		box-sizing: border-box;
 	}
 
 }

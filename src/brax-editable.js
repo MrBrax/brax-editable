@@ -3,6 +3,10 @@ require('selectivity/dropdown');
 require('selectivity/inputs/single');
 require('selectivity/templates');
 
+var tippy = require('tippy.js');
+
+var Choices = require('choices.js');
+
 // import Selectivity from 'selectivity';
 
 class BraxEditable {
@@ -41,6 +45,8 @@ class BraxEditable {
 
 		this.options = [];
 
+		// this.tooltip = null;
+
 		// this.templates = {};
 
 		// this.templates['default'] = `${data.text}`;
@@ -51,6 +57,7 @@ class BraxEditable {
 
 		this.element.classList.add('brax-editable');
 
+		/*
 		// text
 		this.textContainer = document.createElement('span');
 		this.textContainer.setAttribute('data-text', 1);
@@ -58,23 +65,21 @@ class BraxEditable {
 
 		this.element.innerHTML = '';
 
-		/*
-		// icon
-		this.iconContainer = document.createElement('span');
-		this.iconContainer.setAttribute('data-icon', 1);
-		this.iconContainer.innerHTML = '✏';
-		this.element.appendChild( this.iconContainer );
-		*/
+
 
 		this.element.appendChild( this.textContainer );
+		*/
 
 		// input
-		this.inputContainer = document.createElement('span');
+		this.inputContainer = document.createElement('div');
 		this.inputContainer.setAttribute('data-input', 1);
-		this.inputContainer.style.display = 'none';
-		this.element.appendChild( this.inputContainer );
+		this.inputContainer.className = 'brax-editable-input';
+		// this.inputContainer.style.display = 'none';
+		
+		// this.element.appendChild( this.inputContainer );
 
 		// start editing
+		/*
 		this.element.addEventListener( 'click', (evt) => {
 
 			if( this.isEditing ) return;
@@ -88,6 +93,51 @@ class BraxEditable {
 			return false;
 
 		});
+
+		this.element.title = this.value;
+		*/
+
+
+		var tippyConfig = {
+			trigger: 'click',
+			interactive: true,
+			html: this.inputContainer,
+
+			// animation: 'perspective',
+
+			arrow: true
+			
+			// updateDuration: 0,
+
+			/*
+			popperOptions: {
+				modifiers: {
+					preventOverflow: {
+						boundariesElement: 'viewport'
+						// enabled: false
+					}
+				}
+			}
+			*/
+			
+
+		};
+
+		tippyConfig.onShow = () => {
+
+			this.isEditing = true;
+
+		};
+
+		tippyConfig.onHide = () => {
+
+			this.isEditing = false;
+
+		};		
+
+		this.tooltip = tippy( this.element, tippyConfig );
+
+		// console.log( 'created tooltip', this.tooltip );
 
 		this.element.setAttribute('data-editing', 0);
 
@@ -145,11 +195,15 @@ class BraxEditable {
 					// metadata
 					if( item.extra ) option.extra = item.extra;
 
-					option.id = option.value; // selectivity
+					option.id 		= option.value; // selectivity
+					
+					option.label 	= option.text; // choices
 
 					this.options.push( option );
 
 				}
+
+				console.log('got options', this.options);
 
 				// this.options = response.items;
 
@@ -177,12 +231,27 @@ class BraxEditable {
 
 						if( option.value == this.value ){
 							this.selectivity.setValue( option.value );
-							// console.log('found value', option.id);
 						}
 
 					}
 
-					// this.selectivity.focus();
+				}else if( this.choices ){
+
+					console.log('choices', this.choices);
+
+					this.choices.setChoices( this.options, 'value', 'label', false );
+
+					/*
+					for( var option of this.options ){
+
+						this.choices.setChoices( option, 'value', 'label', false );
+
+						// if( option.value == this.value ){
+						// 	this.choices.setValue( option.value );
+						// }
+
+					}
+					*/
 
 				}
 
@@ -205,6 +274,8 @@ class BraxEditable {
 
 	addInputs(){
 
+		// console.log('add inputs');
+
 		if( this.type == 'select'){
 
 			this.inputField 		= document.createElement('select');
@@ -220,10 +291,20 @@ class BraxEditable {
 				return false;
 			}
 
-			this.inputBox 		= document.createElement('div');
-			
-			this.inputContainer.appendChild( this.inputBox );
+			// selectivity box
+			// this.inputBox 		= document.createElement('div');
+			// this.inputContainer.appendChild( this.inputBox );
 
+			this.inputChoices = document.createElement('select');
+
+			this.inputContainer.appendChild( this.inputChoices );
+
+			this.choices = new Choices( this.inputChoices, {
+				// choices: [ { value: 'x', label: 'y' } ]
+			} );
+
+
+			/*
 			this.selectivity = new Selectivity.Inputs.Single({
 				element: this.inputBox,
 				items: [],
@@ -237,6 +318,7 @@ class BraxEditable {
 				allowClear: true,
 				placeholder: this.text
 			});
+			*/
 
 			// console.log( this.selectivity );
 
@@ -342,7 +424,11 @@ class BraxEditable {
 
 	cancel(){
 
-		this.isEditing = false;
+		// this.isEditing = false;
+
+		// console.log( 'cancel', this );
+
+		this.element._tippy.hide();
 
 	}
 
@@ -451,25 +537,26 @@ class BraxEditable {
 
 	set isEditing( val ){
 
+		
 		if( !this._isEditing && val != false ){
 
-			// console.log('edit');
 
 			if(!this.hasInputs){
 				this.addInputs();
 			}
 
-			this.textContainer.style.display = 'none';
-			this.inputContainer.style.display = 'flex';
+			// this.textContainer.style.display = 'none';
+			// this.inputContainer.style.display = 'flex';
 
 			this.focus();
 
 		}else{
 
-			this.textContainer.style.display = 'inline';
-			this.inputContainer.style.display = 'none';
+			// this.textContainer.style.display = 'inline';
+			// this.inputContainer.style.display = 'none';
 
 		}
+		
 
 		// console.log('set edit', val);
 
@@ -509,7 +596,17 @@ class BraxEditable {
 			return this.selectivity.getValue();
 		}
 
-		return this.inputField.value;
+		if( this.choices ){
+			return this.choices.getValue();
+		}
+
+		if( this.inputField ){
+			return this.inputField.value;
+		}
+
+		console.error('Nothing to get value from');
+
+		return false;
 
 	}
 
@@ -519,7 +616,8 @@ class BraxEditable {
 
 	set text( val ){
 		this._text = val;
-		this.textContainer.innerHTML = val;
+		// this.textContainer.innerHTML = val;
+		this.element.innerHTML = val;
 	}
 
 	get value(){
