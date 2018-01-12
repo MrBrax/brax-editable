@@ -1,6 +1,6 @@
 {
   "name": "brax-editable",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "X-Editable alternative (inline editing) without jQuery",
   "main": "src/brax-editable.js",
   "scripts": {

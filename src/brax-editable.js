@@ -285,6 +285,22 @@ class BraxEditable {
 			this.inputTime.value 	= value_time;
 			this.inputTime.type 	= 'time';
 
+			// scroll to change
+			var timeStep = 60000 * 10;
+			this.inputTime.addEventListener('wheel', (evt) => {
+				this.inputTime.valueAsNumber += evt.deltaY < 0 ? timeStep : -timeStep;
+				evt.preventDefault();
+				return false;
+			});
+
+			var dateStep = 1000 * 60 * 60 * 24;
+			this.inputDate.addEventListener('wheel', (evt) => {
+				this.inputDate.valueAsNumber += evt.deltaY < 0 ? dateStep : -dateStep;
+				evt.preventDefault();
+				return false;
+			});
+
+
 			this.inputContainer.appendChild( this.inputTime );
 
 		}else{

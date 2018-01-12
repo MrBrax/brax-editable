@@ -2,6 +2,12 @@
 
 @import "../node_modules/tippy.js/dist/tippy";
 
+@keyframes brax-editing {
+	0% { color: #333; }
+	50% { color: #376FE2; }
+	100% { color: #333; }
+}
+
 .brax-editable {
 	
 	display: inline-block;
@@ -28,6 +34,14 @@
 
 	}
 
+	&[data-editing="1"] {
+
+		animation: brax-editing 1s infinite;
+
+		border-bottom: 1px dashed;
+
+	}
+
 	// &:not([data-hooked]){
 	// 	color: #f00;
 	// }
@@ -45,7 +59,7 @@
 
 .brax-editable-input {
 
-	// font-size: 110%;
+	font-size: 110%;
 	
 	display: flex;
 
@@ -64,11 +78,14 @@
 
 	input[type="date"],
 	input[type="time"],
-	input[type="text"] {
+	input[type="text"],
+	select, option {
 
 		padding: 4px 8px;
 
 		font-family: inherit;
+
+		font-size: inherit;
 
 		border: none;
 
