@@ -15,8 +15,8 @@ import tippy from 'tippy.js/dist/tippy.standalone.js';
 
 import Choices from 'choices.js';
 
-const templates = {}
-templates['test'] = function( choices, template ){
+const BraxEditableTemplates = {}
+BraxEditableTemplates['test'] = function( choices, template ){
 
 	var config = choices.config;
 
@@ -285,10 +285,10 @@ class BraxEditable {
 					// return t.getTemplates( this, template );
 				
 					if( t.template ){
-						if( templates[ t.template ] ){
-							return templates[ t.template ]( this, template );
+						if( BraxEditableTemplates[ t.template ] ){
+							return BraxEditableTemplates[ t.template ]( this, template );
 						}else{
-							console.error( 'Invalid template', t.template, templates );
+							console.error( 'Invalid template', t.template, BraxEditableTemplates );
 						}
 					}
 
@@ -615,4 +615,7 @@ class BraxEditable {
 
 }
 
-export { BraxEditable }
+export {
+	BraxEditable,
+	BraxEditableTemplates
+}

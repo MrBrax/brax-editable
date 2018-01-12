@@ -131,12 +131,52 @@ if( $_POST ){
 		data-value="id5"
 		data-type="choices"
 		data-source="?list"
-		data-template="test"
 		data-url="index.php"
 		data-key="1337"
 	>Choices</a>
 
+	<br><br>
+
+	<a
+		data-editable="1"
+		data-name="input-choices"
+		data-value="id5"
+		data-type="choices"
+		data-source="?list"
+		data-template="external"
+		data-url="index.php"
+		data-key="1337"
+	>Choices (external template)</a>
+
 	<script>
+
+		BraxEditableTemplates['external'] = function( choices, template ){
+
+			var config = choices.config;
+
+			var classNames = config.classNames;
+
+			return {
+
+				item: (data) => {
+					return template(`
+						<div class="${classNames.item} ${data.highlighted ? classNames.highlightedState : classNames.itemSelectable}" data-item data-id="${data.id}" data-value="${data.value}" ${data.active ? 'aria-selected="true"' : ''} ${data.disabled ? 'aria-disabled="true"' : ''}>
+							TEST <span>&bigstar;</span> ${data.label}
+						</div>
+					`);
+				},
+
+				choice: (data) => {
+					return template(`
+						<div class="${classNames.item} ${classNames.itemChoice} ${data.disabled ? classNames.itemDisabled : classNames.itemSelectable}" data-select-text="${config.itemSelectText}" data-choice ${data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable'} data-id="${data.id}" data-value="${data.value}" ${data.groupId > 0 ? 'role="treeitem"' : 'role="option"'}>
+							TEST <span>&bigstar;</span> ${data.label}
+						</div>
+					`);
+				}
+
+			};
+
+		}
 
 		var a = document.querySelectorAll('a[data-editable]');
 
