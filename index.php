@@ -127,14 +127,14 @@ if( $_POST ){
 
 	<a
 		data-editable="1"
-		data-name="input-selectivity"
+		data-name="input-choices"
 		data-value="id5"
-		data-type="selectivity"
+		data-type="choices"
 		data-source="?list"
 		data-template="test"
 		data-url="index.php"
 		data-key="1337"
-	>Selectivity</a>
+	>Choices</a>
 
 	<script>
 

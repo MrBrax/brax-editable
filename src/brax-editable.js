@@ -1,7 +1,9 @@
+/*
 var Selectivity = require('selectivity');
 require('selectivity/dropdown');
 require('selectivity/inputs/single');
 require('selectivity/templates');
+*/
 
 var tippy = require('tippy.js');
 
@@ -193,9 +195,12 @@ class BraxEditable {
 					if( item.id ) option.value = item.id;
 
 					// metadata
-					if( item.extra ) option.extra = item.extra;
+					if( item.extra ){
+						option.extra = item.extra;
+						option.customProperties = option.extra // choices
+					}
 
-					option.id 		= option.value; // selectivity
+					// option.id 		= option.value; // selectivity
 					
 					option.label 	= option.text; // choices
 
@@ -223,23 +228,13 @@ class BraxEditable {
 
 					// this.inputField.focus();
 
-				}else if( this.selectivity ){
-
-					for( var option of this.options ){
-
-						this.selectivity.items.push( option );
-
-						if( option.value == this.value ){
-							this.selectivity.setValue( option.value );
-						}
-
-					}
-
 				}else if( this.choices ){
 
 					console.log('choices', this.choices);
 
 					this.choices.setChoices( this.options, 'value', 'label', false );
+
+					if( this.value ) this.choices.setValueByChoice( this.value );
 
 					/*
 					for( var option of this.options ){
@@ -284,43 +279,18 @@ class BraxEditable {
 
 			this.fetchList();
 
-		}else if( this.type == 'selectivity' ){
+		}else if( this.type == 'choices' ){
 
-			if( !Selectivity ){
-				console.error('Selectivity not found');
+			if( !Choices ){
+				console.error('Choices not found');
 				return false;
 			}
-
-			// selectivity box
-			// this.inputBox 		= document.createElement('div');
-			// this.inputContainer.appendChild( this.inputBox );
 
 			this.inputChoices = document.createElement('select');
 
 			this.inputContainer.appendChild( this.inputChoices );
 
-			this.choices = new Choices( this.inputChoices, {
-				// choices: [ { value: 'x', label: 'y' } ]
-			} );
-
-
-			/*
-			this.selectivity = new Selectivity.Inputs.Single({
-				element: this.inputBox,
-				items: [],
-				
-				templates: {
-					resultItem: this.renderTemplate.bind(this)
-				},
-			
-				// showSearchInputInDropdown: false,
-				showSearchInput: true,
-				allowClear: true,
-				placeholder: this.text
-			});
-			*/
-
-			// console.log( this.selectivity );
+			this.choices = new Choices( this.inputChoices );
 
 			this.fetchList();
 
@@ -436,7 +406,7 @@ class BraxEditable {
 
 		this.inputsEnabled = false;
 
-		console.log( 'save', this.url, this.key );
+		// console.log( 'save', this.url, this.key );
 
 		// var req = new Request( this.url );
 		// req.method = this.method;
@@ -451,6 +421,7 @@ class BraxEditable {
 		data.append( 'name', this.name );
 		data.append( 'value', this.currentValue );
 
+		console.log( 'save', this.url, this.key, this.name, this.currentValue );
 
 		var config = {
 			method: this.method,
@@ -491,6 +462,8 @@ class BraxEditable {
 				if( response.reload || response.refresh ) location.reload();
 
 				if( response.redirect ) location.href = response.redirect;
+
+				this.element._tippy.hide();
 
 				this.isEditing = false;
 
@@ -550,7 +523,9 @@ class BraxEditable {
 
 			this.focus();
 
-		}else{
+		}else if( this._isEditing && val != true ){
+
+			// this.element._tippy.hide();
 
 			// this.textContainer.style.display = 'inline';
 			// this.inputContainer.style.display = 'none';
@@ -597,7 +572,7 @@ class BraxEditable {
 		}
 
 		if( this.choices ){
-			return this.choices.getValue();
+			return this.choices.getValue( true );
 		}
 
 		if( this.inputField ){
