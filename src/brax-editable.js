@@ -15,10 +15,43 @@ import tippy from 'tippy.js/dist/tippy.standalone.js';
 
 import Choices from 'choices.js';
 
+const templates = {}
+templates['test'] = function( choices, template ){
+
+	var config = choices.config;
+
+	var classNames = config.classNames;
+
+	return {
+
+		item: (data) => {
+			return template(`
+				<div class="${classNames.item} ${data.highlighted ? classNames.highlightedState : classNames.itemSelectable}" data-item data-id="${data.id}" data-value="${data.value}" ${data.active ? 'aria-selected="true"' : ''} ${data.disabled ? 'aria-disabled="true"' : ''}>
+					<span>&bigstar;</span> ${data.label}
+				</div>
+			`);
+		},
+
+		choice: (data) => {
+			return template(`
+				<div class="${classNames.item} ${classNames.itemChoice} ${data.disabled ? classNames.itemDisabled : classNames.itemSelectable}" data-select-text="${config.itemSelectText}" data-choice ${data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable'} data-id="${data.id}" data-value="${data.value}" ${data.groupId > 0 ? 'role="treeitem"' : 'role="option"'}>
+					<span>&bigstar;</span> ${data.label}
+				</div>
+			`);
+		}
+
+	};
+
+}
 
 class BraxEditable {
 
 	constructor( element ){
+
+		if(!element){
+			console.error('No element provided');
+			return false;
+		}
 
 		this.element = element;
 
@@ -61,7 +94,7 @@ class BraxEditable {
 
 		this.options = [];
 
-	}
+	};
 
 	hook(){
 
@@ -249,7 +282,16 @@ class BraxEditable {
 			this.choices = new Choices( this.inputChoices, {
 
 				callbackOnCreateTemplates: function( template ){
-					return t.getTemplates( this, template );
+					// return t.getTemplates( this, template );
+				
+					if( t.template ){
+						if( templates[ t.template ] ){
+							return templates[ t.template ]( this, template );
+						}else{
+							console.error( 'Invalid template', t.template, templates );
+						}
+					}
+
 				}
 
 			} );
@@ -461,53 +503,6 @@ class BraxEditable {
 			this.inputsEnabled = true;
 
 		});
-
-	}
-
-	getTemplates( choices, template ){
-
-		var config = choices.config;
-
-		var classNames = config.classNames;
-	
-		if( this.template == 'test' ){
-
-			return {
-
-				item: (data) => {
-					return template(`
-						<div class="${classNames.item} ${data.highlighted ? classNames.highlightedState : classNames.itemSelectable}" data-item data-id="${data.id}" data-value="${data.value}" ${data.active ? 'aria-selected="true"' : ''} ${data.disabled ? 'aria-disabled="true"' : ''}>
-							<span>&bigstar;</span> ${data.label}
-						</div>
-					`);
-				},
-
-				choice: (data) => {
-					return template(`
-						<div class="${classNames.item} ${classNames.itemChoice} ${data.disabled ? classNames.itemDisabled : classNames.itemSelectable}" data-select-text="${config.itemSelectText}" data-choice ${data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable'} data-id="${data.id}" data-value="${data.value}" ${data.groupId > 0 ? 'role="treeitem"' : 'role="option"'}>
-							<span>&bigstar;</span> ${data.label}
-						</div>
-					`);
-				}
-
-			};
-
-		}
-
-		// default
-		return {
-			
-			item: (data) => {
-
-				return template(`
-					<div class="${classNames.item} ${data.highlighted ? classNames.highlightedState : classNames.itemSelectable}" data-item data-id="${data.id}" data-value="${data.value}" ${data.active ? 'aria-selected="true"' : ''} ${data.disabled ? 'aria-disabled="true"' : ''}>
-						test ${data.label}
-					</div>
-				`);
-
-			}
-
-		};
 
 	}
 
