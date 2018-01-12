@@ -1,12 +1,11 @@
 {
   "name": "brax-editable",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "X-Editable alternative (inline editing) without jQuery",
-  "main": "js/brax-editable.js",
+  "main": "src/brax-editable.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "php -S localhost:2000",
-    "css": "sass --watch src/brax-editable.scss:css/brax-editable.css --style compressed"
+    "build": "gulp",
+    "start": "php -S localhost:2000"
   },
   "repository": {
     "type": "git",
@@ -21,11 +20,19 @@
   "dependencies": {
     "babel-cli": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "babel-minify-webpack-plugin": "^0.2.0",
+    "babel-plugin-transform-object-assign": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2015-rollup": "^3.0.0",
     "choices.js": "^3.0.3",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
-    "tippy.js": "^2.0.8",
-    "webpack": "^3.10.0"
+    "gulp-sass": "^3.1.0",
+    "node-sass": "^4.7.2",
+    "tippy.js": "^2.0.9",
+    "webpack": "^3.10.0",
+    "webpack-stream": "^4.0.0"
   }
 }

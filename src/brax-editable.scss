@@ -1,5 +1,7 @@
 @import "../node_modules/choices.js/assets/styles/scss/choices";
 
+@import "../node_modules/tippy.js/dist/tippy";
+
 .brax-editable {
 	
 	display: inline-block;
@@ -39,13 +41,11 @@
 	}
 	*/
 
-	input[type="date"], input[type="time"] {
-		padding: 3px 6px;
-	}
-
 }
 
 .brax-editable-input {
+
+	// font-size: 110%;
 	
 	display: flex;
 
@@ -54,12 +54,24 @@
 	color: #000;
 
 	.choices {
-		min-width: 200px;
+		min-width: 250px;
 		margin-bottom: 0;
 	}
-	
+
 	.choices__inner {
 		box-sizing: border-box;
+	}
+
+	input[type="date"],
+	input[type="time"],
+	input[type="text"] {
+
+		padding: 4px 8px;
+
+		font-family: inherit;
+
+		border: none;
+
 	}
 
 }
@@ -74,7 +86,7 @@
 
 	cursor: pointer;
 
-	padding: 3px 6px;
+	padding: 4px 8px;
 
 	&:hover {
 		background: #000;

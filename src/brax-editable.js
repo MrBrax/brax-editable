@@ -1,15 +1,20 @@
-/*
-var Selectivity = require('selectivity');
-require('selectivity/dropdown');
-require('selectivity/inputs/single');
-require('selectivity/templates');
-*/
+// const tippy = require('tippy.js');
+// const tippy = require('tippy.js/tippy.standalone.js');
 
-var tippy = require('tippy.js');
+// import Popper from 'popper.js';
 
-var Choices = require('choices.js');
+// import { tippy } from 'tippy.js/src/js/tippy.js';
 
-// import Selectivity from 'selectivity';
+import tippy from 'tippy.js/dist/tippy.standalone.js';
+
+// import tippy from 'tippy.js';
+
+// const Choices = require('choices.js');
+
+// import Choices from 'choices.js/assets/scripts/src/choices.js';
+
+import Choices from 'choices.js';
+
 
 class BraxEditable {
 
@@ -17,27 +22,36 @@ class BraxEditable {
 
 		this.element = element;
 
-
+		// the only thing displayed to the user
 		this._text = this.element.innerHTML;
 
+		// main value
 		this._value = this.element.getAttribute('data-value') ? this.element.getAttribute('data-value') : this._text;
 
-
+		// input type
 		this.type = this.element.getAttribute('data-type') ? this.element.getAttribute('data-type') : 'text';
 
+		// primary key, or id
 		this.key = this.element.getAttribute('data-key');
 
+		// field name
 		this.name = this.element.getAttribute('data-name');
 
+		// request url
 		this.url = this.element.getAttribute('data-url');
 
+		// request method
 		this.method = this.element.getAttribute('data-get') ? 'GET' : 'POST';
 
+		// list source for choices
 		this.source = this.element.getAttribute('data-source');
 
+		// template for choices
 		this.template = this.element.getAttribute('data-template');		
 
+
 		this.hook();
+
 
 		this._isEditing = false;
 
@@ -47,87 +61,37 @@ class BraxEditable {
 
 		this.options = [];
 
-		// this.tooltip = null;
-
-		// this.templates = {};
-
-		// this.templates['default'] = `${data.text}`;
-
 	}
 
 	hook(){
 
 		this.element.classList.add('brax-editable');
 
-		/*
-		// text
-		this.textContainer = document.createElement('span');
-		this.textContainer.setAttribute('data-text', 1);
-		this.textContainer.innerHTML = this.element.innerHTML;
-
-		this.element.innerHTML = '';
-
-
-
-		this.element.appendChild( this.textContainer );
-		*/
 
 		// input
 		this.inputContainer = document.createElement('div');
 		this.inputContainer.setAttribute('data-input', 1);
 		this.inputContainer.className = 'brax-editable-input';
-		// this.inputContainer.style.display = 'none';
-		
-		// this.element.appendChild( this.inputContainer );
-
-		// start editing
-		/*
-		this.element.addEventListener( 'click', (evt) => {
-
-			if( this.isEditing ) return;
-
-			this.isEditing = true;
-			
-			evt.preventDefault();
-
-			evt.stopPropagation();
-			
-			return false;
-
-		});
-
-		this.element.title = this.value;
-		*/
 
 
+		// Tooltip
 		var tippyConfig = {
 			trigger: 'click',
 			interactive: true,
 			html: this.inputContainer,
-
-			// animation: 'perspective',
-
-			arrow: true
-			
-			// updateDuration: 0,
-
-			/*
-			popperOptions: {
-				modifiers: {
-					preventOverflow: {
-						boundariesElement: 'viewport'
-						// enabled: false
-					}
-				}
-			}
-			*/
-			
+			arrow: true			
 
 		};
 
 		tippyConfig.onShow = () => {
 
 			this.isEditing = true;
+
+		};
+
+		tippyConfig.onShown = () => {
+
+			this.focus();
 
 		};
 
@@ -139,7 +103,7 @@ class BraxEditable {
 
 		this.tooltip = tippy( this.element, tippyConfig );
 
-		// console.log( 'created tooltip', this.tooltip );
+
 
 		this.element.setAttribute('data-editing', 0);
 
@@ -172,11 +136,7 @@ class BraxEditable {
 		})
 		.then( (response) => {
 
-			// console.log( 'list response', response );
-
 			if( response.items ){
-
-				// console.log('items', response.items);
 
 				if( !this.isEditing ) return;
 
@@ -208,9 +168,7 @@ class BraxEditable {
 
 				}
 
-				console.log('got options', this.options);
-
-				// this.options = response.items;
+				// console.log('got options', this.options);
 
 				if( this.inputField ){
 
@@ -226,11 +184,7 @@ class BraxEditable {
 
 					}
 
-					// this.inputField.focus();
-
 				}else if( this.choices ){
-
-					console.log('choices', this.choices);
 
 					this.choices.setChoices( this.options, 'value', 'label', false );
 
@@ -290,7 +244,15 @@ class BraxEditable {
 
 			this.inputContainer.appendChild( this.inputChoices );
 
-			this.choices = new Choices( this.inputChoices );
+			var t = this; // i hate doing this
+
+			this.choices = new Choices( this.inputChoices, {
+
+				callbackOnCreateTemplates: function( template ){
+					return t.getTemplates( this, template );
+				}
+
+			} );
 
 			this.fetchList();
 
@@ -388,15 +350,17 @@ class BraxEditable {
 
 		if( this.inputField ) this.inputField.focus();
 
-		if( this.selectivity ) this.selectivity.focus();
+		if( this.inputChoices ){
+			
+			this.choices.showDropdown();
+			
+			this.choices.input.focus();
+
+		}
 
 	}
 
 	cancel(){
-
-		// this.isEditing = false;
-
-		// console.log( 'cancel', this );
 
 		this.element._tippy.hide();
 
@@ -406,7 +370,7 @@ class BraxEditable {
 
 		this.inputsEnabled = false;
 
-		// console.log( 'save', this.url, this.key );
+		// console.log( 'save', this.url, this.key, this.name, this.currentValue );
 
 		// var req = new Request( this.url );
 		// req.method = this.method;
@@ -419,9 +383,7 @@ class BraxEditable {
 		var data = new FormData();
 		data.append( 'key', this.key );
 		data.append( 'name', this.name );
-		data.append( 'value', this.currentValue );
-
-		console.log( 'save', this.url, this.key, this.name, this.currentValue );
+		data.append( 'value', this.currentValue );		
 
 		var config = {
 			method: this.method,
@@ -486,21 +448,50 @@ class BraxEditable {
 
 	}
 
-	renderTemplate( item ){
+	getTemplates( choices, template ){
 
+		var config = choices.config;
+
+		var classNames = config.classNames;
 	
 		if( this.template == 'test' ){
-			return `<div class="selectivity-result-item" data-item-id="${item.id}">
-				<em>${escape(item.text)}</em>
-				(${item.extra})
-			</div>`;
+
+			return {
+
+				item: (data) => {
+					return template(`
+						<div class="${classNames.item} ${data.highlighted ? classNames.highlightedState : classNames.itemSelectable}" data-item data-id="${data.id}" data-value="${data.value}" ${data.active ? 'aria-selected="true"' : ''} ${data.disabled ? 'aria-disabled="true"' : ''}>
+							<span>&bigstar;</span> ${data.label}
+						</div>
+					`);
+				},
+
+				choice: (data) => {
+					return template(`
+						<div class="${classNames.item} ${classNames.itemChoice} ${data.disabled ? classNames.itemDisabled : classNames.itemSelectable}" data-select-text="${config.itemSelectText}" data-choice ${data.disabled ? 'data-choice-disabled aria-disabled="true"' : 'data-choice-selectable'} data-id="${data.id}" data-value="${data.value}" ${data.groupId > 0 ? 'role="treeitem"' : 'role="option"'}>
+							<span>&bigstar;</span> ${data.label}
+						</div>
+					`);
+				}
+
+			};
+
 		}
-		
 
 		// default
-		return `<div class="selectivity-result-item" data-item-id="${item.id}">
-			${escape(item.text)}
-		</div>`;
+		return {
+			
+			item: (data) => {
+
+				return template(`
+					<div class="${classNames.item} ${data.highlighted ? classNames.highlightedState : classNames.itemSelectable}" data-item data-id="${data.id}" data-value="${data.value}" ${data.active ? 'aria-selected="true"' : ''} ${data.disabled ? 'aria-disabled="true"' : ''}>
+						test ${data.label}
+					</div>
+				`);
+
+			}
+
+		};
 
 	}
 
@@ -521,7 +512,7 @@ class BraxEditable {
 			// this.textContainer.style.display = 'none';
 			// this.inputContainer.style.display = 'flex';
 
-			this.focus();
+			// this.focus();
 
 		}else if( this._isEditing && val != true ){
 

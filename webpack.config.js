@@ -1,14 +1,15 @@
 const path = require('path');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
+const MinifyPlugin = require("babel-minify-webpack-plugin");
 
 module.exports = {
 
 	entry: './src/brax-editable.js',
 
-	devtool: 'none',
+	// devtool: 'source-map',
 
-	watch: true,
+	// watch: true,
 
 	module: {
 
@@ -44,29 +45,29 @@ module.exports = {
 		filename: 'brax-editable.js',
 		
 		path: path.resolve(__dirname, 'js'),
-		
-		// library: 'Brax',
 	   
 		libraryTarget: 'umd'
-
-		// libraryTarget: { root:'_' }
 
 	},
 
 	resolve: {
 		modules: [
 			"node_modules",
-			// path.resolve(__dirname, "js/riot"),
 			path.resolve(__dirname, "js")
-			// path.resolve(__dirname, "templates"),
 		]
 	},
 
 	plugins: [
-
-		new UglifyJSPlugin({
-			minimize: true
-		})	
+		
+		// new MinifyPlugin( )
+		
+		new UglifyJSPlugin()
+		
+		//new UglifyJSPlugin({
+			// minimize: true,
+			// sourceMap: true
+		//})
+		
 
 	]
 	
