@@ -1,3 +1,5 @@
+"use strict";
+
 // const tippy = require('tippy.js');
 // const tippy = require('tippy.js/tippy.standalone.js');
 
@@ -15,7 +17,7 @@ import tippy from 'tippy.js/dist/tippy.standalone.js';
 
 import Choices from 'choices.js';
 
-const BraxEditableTemplates = {}
+const BraxEditableTemplates = {};
 BraxEditableTemplates['test'] = function( choices, template ){
 
 	var config = choices.config;
@@ -41,6 +43,41 @@ BraxEditableTemplates['test'] = function( choices, template ){
 		}
 
 	};
+
+}
+
+const BraxEditableHandlers = {};
+BraxEditableHandlers['default'] = function( data ){
+
+	var options = [];
+
+	for( var item of data.items ){
+
+		var option = {};
+
+		// default
+		option.value 	= item.value;
+		option.text 	= item.text;
+
+		// some systems do this
+		if( item.pk ) option.value = item.pk;
+		if( item.id ) option.value = item.id;
+
+		// metadata
+		if( item.extra ){
+			option.extra = item.extra;
+			option.customProperties = option.extra // choices
+		}
+
+		// option.id 		= option.value; // selectivity
+		
+		option.label 	= option.text; // choices
+
+		options.push( option );
+
+	}
+
+	return options;
 
 }
 
@@ -78,6 +115,9 @@ class BraxEditable {
 
 		// list source for choices
 		this.source = this.element.getAttribute('data-source');
+
+		// handler for choices
+		this.handler = this.element.getAttribute('data-handler') ? this.element.getAttribute('data-handler') : 'default';	
 
 		// template for choices
 		this.template = this.element.getAttribute('data-template');		
@@ -169,37 +209,13 @@ class BraxEditable {
 		})
 		.then( (response) => {
 
-			if( response.items ){
+			if( response ){
 
 				if( !this.isEditing ) return;
 
-				this.options = [];
+				this.options = BraxEditableHandlers[ this.handler ]( response );
 
-				for( var item of response.items ){
-
-					var option = {};
-
-					// default
-					option.value 	= item.value;
-					option.text 	= item.text;
-
-					// some systems do this
-					if( item.pk ) option.value = item.pk;
-					if( item.id ) option.value = item.id;
-
-					// metadata
-					if( item.extra ){
-						option.extra = item.extra;
-						option.customProperties = option.extra // choices
-					}
-
-					// option.id 		= option.value; // selectivity
-					
-					option.label 	= option.text; // choices
-
-					this.options.push( option );
-
-				}
+				
 
 				// console.log('got options', this.options);
 
@@ -617,5 +633,6 @@ class BraxEditable {
 
 export {
 	BraxEditable,
-	BraxEditableTemplates
+	BraxEditableTemplates,
+	BraxEditableHandlers
 }

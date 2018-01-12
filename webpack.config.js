@@ -1,7 +1,7 @@
 const path = require('path');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
-const MinifyPlugin = require("babel-minify-webpack-plugin");
+// const MinifyPlugin = require("babel-minify-webpack-plugin");
 
 module.exports = {
 
@@ -27,8 +27,8 @@ module.exports = {
 				
 					options: {
 						presets: [
-							'env'
-							// '@babel/preset-env'
+							// 'env'
+							'@babel/preset-env'
 						]
 					}
 
