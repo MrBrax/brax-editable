@@ -110,6 +110,9 @@ class BraxEditable {
 		// request url
 		this.url = this.element.getAttribute('data-url');
 
+		// request csrf
+		this.csrf = this.element.getAttribute('data-csrf');
+
 		// request method
 		this.method = this.element.getAttribute('data-get') ? 'GET' : 'POST';
 
@@ -457,12 +460,20 @@ class BraxEditable {
 		var data = new FormData();
 		data.append( 'key', this.key );
 		data.append( 'name', this.name );
-		data.append( 'value', this.currentValue );		
+		data.append( 'value', this.currentValue );
+
+		if( this.csrf ) data.append( 'csrfmiddlewaretoken', this.csrf );
 
 		var config = {
+			
 			method: this.method,
+			
 			// headers: headers,
-			body: data
+			
+			body: data,
+
+			credentials: "same-origin"
+
 		};
 
 		fetch( this.url, config )
