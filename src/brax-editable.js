@@ -113,8 +113,11 @@ class BraxEditable {
 		// request csrf
 		this.csrf = this.element.getAttribute('data-csrf');
 
+		// use json
+		this.useJSON = this.element.getAttribute('data-json') !== undefined;
+
 		// request method
-		this.method = this.element.getAttribute('data-get') ? 'GET' : 'POST';
+		this.method = this.element.getAttribute('data-method') ? this.element.getAttribute('data-method') : 'POST';
 
 		// list source for choices
 		this.source = this.element.getAttribute('data-source');
@@ -454,25 +457,55 @@ class BraxEditable {
 
 		// console.log('request', req);
 
-		// var headers = new Headers();
-		// headers.append('Content-Type', 'application/json');
+		var headers = new Headers();
 
-		var data = new FormData();
-		data.append( 'key', this.key );
-		data.append( 'name', this.name );
-		data.append( 'value', this.currentValue );
+		var data;
 
-		if( this.csrf ) data.append( 'csrfmiddlewaretoken', this.csrf );
+		if( this.useJSON ){
+
+			data = {
+				key: this.key,
+				name: this.name,
+				value: this.currentValue
+			};
+
+			// django
+			if( this.csrf ) data['csrfmiddlewaretoken'] = this.csrf;
+
+			data = JSON.stringify(data);
+
+			headers.append('Content-Type', 'application/json');
+
+		}else{
+
+			data = new FormData();
+			
+			data.append( 'key', this.key );
+			data.append( 'name', this.name );
+			data.append( 'value', this.currentValue );
+
+			// django
+			if( this.csrf ) data.append( 'csrfmiddlewaretoken', this.csrf );
+
+		}
+
+		if( this.csrf ){
+			// laravel
+			headers.append('X-CSRF-TOKEN', this.csrf);
+
+		}
 
 		var config = {
 			
 			method: this.method,
 			
-			// headers: headers,
+			headers: headers,
 			
 			body: data,
 
-			credentials: "same-origin"
+			credentials: "same-origin",
+
+			cache: "no-cache"
 
 		};
 
@@ -499,6 +532,8 @@ class BraxEditable {
 			this.inputsEnabled = true;
 
 			if( response.status == 'ok' ){
+
+				this.text = this.currentValue;
 
 				if( response.newValue ) this.value = response.newValue;
 
