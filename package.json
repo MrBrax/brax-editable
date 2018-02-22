@@ -11,8 +11,8 @@
     "type": "git",
     "url": "git+https://github.com/MrBrax/brax-editable.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "mrbrax",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/MrBrax/brax-editable/issues"
   },
