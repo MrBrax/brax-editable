@@ -1,9 +1,21 @@
 # brax-editable
 X-Editable alternative (inline editing) without jQuery
 
+It requires (and bundles) [Tippy.js](https://github.com/atomiks/tippyjs) & [Choices](https://github.com/jshjohnson/Choices) though.
+
 # Usage
 
-Check "index.php" for examples
+Check "index.php" for examples.
+
+
+# Input types
+
+- text
+- select
+- choices
+- datetime
+- [other value for raw input type]
+
 
 # TODO
 

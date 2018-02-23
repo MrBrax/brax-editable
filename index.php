@@ -76,7 +76,19 @@ if( $_POST ){
 		data-type="text"
 		data-url="index.php"
 		data-key="1337"
-	>Test</a>
+	>Text</a>
+
+	<br><br>
+
+	<a
+		data-editable="1"
+		data-name="input-text"
+		data-method="PUT"
+		data-value="testValue"
+		data-type="text"
+		data-url="index.php"
+		data-key="1337"
+	>Put</a>
 
 	<br><br>
 
