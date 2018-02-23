@@ -99,6 +99,7 @@ class BraxEditable {
 		this._value = this.element.getAttribute('data-value') ? this.element.getAttribute('data-value') : this._text;
 
 		// input type
+		// available: text, select, choices, datetime, [other]
 		this.type = this.element.getAttribute('data-type') ? this.element.getAttribute('data-type') : 'text';
 
 		// primary key, or id
@@ -348,6 +349,7 @@ class BraxEditable {
 			this.inputTime 			= document.createElement('input');
 			this.inputTime.value 	= value_time;
 			this.inputTime.type 	= 'time';
+			// this.inputTime.step		= 1; // seconds
 
 			// scroll to change
 			var timeStep = 60000 * 10;
@@ -464,13 +466,14 @@ class BraxEditable {
 		if( this.useJSON ){
 
 			data = {
-				key: this.key,
-				name: this.name,
-				value: this.currentValue
+				// key: this.key,
+				// name: this.name,
+				// value: this.currentValue
+				[this.name]: this.currentValue
 			};
 
 			// django
-			if( this.csrf ) data['csrfmiddlewaretoken'] = this.csrf;
+			// if( this.csrf ) data['csrfmiddlewaretoken'] = this.csrf;
 
 			data = JSON.stringify(data);
 
